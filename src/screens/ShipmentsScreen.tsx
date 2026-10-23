@@ -1,24 +1,47 @@
-import { Platform, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 
+import { EmptyState } from '../components/EmptyState';
+import { ScreenHeader } from '../components/ScreenHeader';
+import { SearchInput } from '../components/SearchInput';
 import { ShipmentCard } from '../components/ShipmentCard';
 import { SHIPMENTS } from '../data/shipments';
 import { COLORS, SPACING } from '../theme/colors';
-
-const TOP_INSET =
-  Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + SPACING.md : 56;
+import { matchesQuery } from '../utils/search';
 
 export function ShipmentsScreen() {
+  const [query, setQuery] = useState('');
+
+  const filtered = SHIPMENTS.filter((shipment) =>
+    matchesQuery(
+      query,
+      shipment.reference,
+      shipment.supplier,
+      shipment.product,
+      shipment.originCountry,
+    ),
+  );
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Shipments</Text>
-        <Text style={styles.subtitle}>{SHIPMENTS.length} envíos activos</Text>
-      </View>
-      <ScrollView contentContainerStyle={styles.list}>
-        {SHIPMENTS.map((shipment) => (
-          <ShipmentCard key={shipment.id} shipment={shipment} />
-        ))}
-      </ScrollView>
+      <ScreenHeader
+        title="Shipments"
+        subtitle={`${filtered.length} de ${SHIPMENTS.length} envíos`}
+      >
+        <SearchInput
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Buscar por referencia, proveedor o país"
+        />
+      </ScreenHeader>
+      <FlatList
+        data={filtered}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <ShipmentCard shipment={item} />}
+        contentContainerStyle={styles.list}
+        keyboardShouldPersistTaps="handled"
+        ListEmptyComponent={<EmptyState message="No hay envíos que coincidan con tu búsqueda." />}
+      />
     </View>
   );
 }
@@ -27,21 +50,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    paddingTop: TOP_INSET,
-  },
-  header: {
-    paddingHorizontal: SPACING.md,
-    paddingBottom: SPACING.md,
-  },
-  title: {
-    color: COLORS.textPrimary,
-    fontSize: 28,
-    fontWeight: '800',
-  },
-  subtitle: {
-    color: COLORS.accent,
-    fontSize: 14,
-    marginTop: SPACING.xs,
   },
   list: {
     paddingHorizontal: SPACING.md,
