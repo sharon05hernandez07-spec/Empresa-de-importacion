@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { COLORS, SPACING } from '../theme/colors';
@@ -7,14 +6,13 @@ import { StatusBadge } from './StatusBadge';
 
 interface ShipmentCardProps {
   shipment: Shipment;
+  onPress: () => void;
 }
 
-export function ShipmentCard({ shipment }: ShipmentCardProps) {
-  const [expanded, setExpanded] = useState(false);
-
+export function ShipmentCard({ shipment, onPress }: ShipmentCardProps) {
   return (
     <Pressable
-      onPress={() => setExpanded((prev) => !prev)}
+      onPress={onPress}
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
     >
       <View style={styles.header}>
@@ -29,23 +27,6 @@ export function ShipmentCard({ shipment }: ShipmentCardProps) {
       <Text style={styles.product}>
         {shipment.quantity} × {shipment.product}
       </Text>
-
-      {expanded && (
-        <View style={styles.details}>
-          <View style={styles.row}>
-            <Text style={styles.label}>Origen</Text>
-            <Text style={styles.value}>{shipment.originCountry}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>Puerto destino</Text>
-            <Text style={styles.value}>{shipment.destinationPort}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>ETA</Text>
-            <Text style={styles.value}>{shipment.eta}</Text>
-          </View>
-        </View>
-      )}
     </Pressable>
   );
 }
@@ -89,25 +70,5 @@ const styles = StyleSheet.create({
   product: {
     color: COLORS.textPrimary,
     fontSize: 15,
-  },
-  details: {
-    marginTop: SPACING.md,
-    paddingTop: SPACING.md,
-    borderTopWidth: 1,
-    borderTopColor: COLORS.border,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: SPACING.xs,
-  },
-  label: {
-    color: COLORS.textSecondary,
-    fontSize: 13,
-  },
-  value: {
-    color: COLORS.textPrimary,
-    fontSize: 13,
-    fontWeight: '600',
   },
 });

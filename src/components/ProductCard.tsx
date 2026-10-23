@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { CATEGORY_LABELS } from '../data/categories';
 import { COLORS, SPACING } from '../theme/colors';
@@ -8,11 +8,15 @@ import type { Product } from '../types/product';
 interface ProductCardProps {
   product: Product;
   supplierName: string;
+  onPress: () => void;
 }
 
-export function ProductCard({ product, supplierName }: ProductCardProps) {
+export function ProductCard({ product, supplierName, onPress }: ProductCardProps) {
   return (
-    <View style={styles.card}>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+    >
       <View style={styles.header}>
         <View style={styles.headerText}>
           <Text style={styles.name}>{product.name}</Text>
@@ -27,7 +31,7 @@ export function ProductCard({ product, supplierName }: ProductCardProps) {
         <Text style={styles.meta}>Arancel {product.tariffPercent}%</Text>
         <Text style={styles.meta}>Stock {product.stock}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
@@ -39,6 +43,9 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     padding: SPACING.md,
     marginBottom: SPACING.md,
+  },
+  cardPressed: {
+    opacity: 0.8,
   },
   header: {
     flexDirection: 'row',

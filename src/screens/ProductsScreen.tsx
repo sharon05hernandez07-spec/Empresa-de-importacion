@@ -1,5 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { EmptyState } from '../components/EmptyState';
 import { ProductCard } from '../components/ProductCard';
@@ -9,7 +12,10 @@ import { CATEGORY_LABELS } from '../data/categories';
 import { PRODUCTS } from '../data/products';
 import { SUPPLIERS } from '../data/suppliers';
 import { COLORS, SPACING } from '../theme/colors';
+import type { ProductsStackParamList } from '../types/navigation';
 import { matchesQuery } from '../utils/search';
+
+type ProductsNavigation = NativeStackNavigationProp<ProductsStackParamList, 'ProductsList'>;
 
 const SUPPLIER_NAMES = new Map(SUPPLIERS.map((supplier) => [supplier.id, supplier.name]));
 
@@ -18,6 +24,7 @@ function getSupplierName(supplierId: string): string {
 }
 
 export function ProductsScreen() {
+  const navigation = useNavigation<ProductsNavigation>();
   const [query, setQuery] = useState('');
 
   const filtered = PRODUCTS.filter((product) =>
@@ -31,7 +38,7 @@ export function ProductsScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <ScreenHeader
         title="Products"
         subtitle={`${filtered.length} de ${PRODUCTS.length} productos`}
@@ -46,13 +53,17 @@ export function ProductsScreen() {
         data={filtered}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ProductCard product={item} supplierName={getSupplierName(item.supplierId)} />
+          <ProductCard
+            product={item}
+            supplierName={getSupplierName(item.supplierId)}
+            onPress={() => navigation.navigate('ProductDetail', { productId: item.id })}
+          />
         )}
         contentContainerStyle={styles.list}
         keyboardShouldPersistTaps="handled"
         ListEmptyComponent={<EmptyState message="No hay productos que coincidan con tu búsqueda." />}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
