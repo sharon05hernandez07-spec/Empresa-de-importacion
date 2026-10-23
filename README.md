@@ -13,7 +13,10 @@ App móvil (React Native + Expo SDK 58 + TypeScript) para gestionar una empresa 
     pnpm install
     pnpm start
 
+Si la red bloquea la conexión con el celular, usar `pnpm start --tunnel`.
+
 ## Estado por rama
 
 - `week-01`: pantalla de shipments con tarjetas (Core Components y Flexbox)
 - `week-02`: listas con `FlatList`, búsqueda sin tildes, pantalla de products y tema tipográfico
+- `week-03`: React Navigation 7 con tabs (Shipments y Products), stacks anidados, pantallas de detalle y rutas tipadas
