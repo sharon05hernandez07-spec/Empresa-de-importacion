@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "Empresa de Importación",
+    "slug": "empresa-importacion",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.importaciones.app"
+    },
+    "android": {
+      "package": "com.importaciones.app"
+    }
+  }
+}
