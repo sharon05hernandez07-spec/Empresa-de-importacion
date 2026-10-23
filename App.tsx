@@ -1,36 +1,17 @@
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { SegmentedControl } from './src/components/SegmentedControl';
-import { ProductsScreen } from './src/screens/ProductsScreen';
-import { ShipmentsScreen } from './src/screens/ShipmentsScreen';
-import { COLORS } from './src/theme/colors';
-import { TOP_INSET } from './src/theme/layout';
-
-type TabKey = 'shipments' | 'products';
-
-const TABS: { key: TabKey; label: string }[] = [
-  { key: 'shipments', label: 'Shipments' },
-  { key: 'products', label: 'Products' },
-];
+import { RootTabs } from './src/navigation/RootTabs';
+import { NAVIGATION_THEME } from './src/theme/navigation';
 
 export default function App() {
-  const [tab, setTab] = useState<TabKey>('shipments');
-
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
-      <SegmentedControl options={TABS} value={tab} onChange={setTab} />
-      {tab === 'shipments' ? <ShipmentsScreen /> : <ProductsScreen />}
-    </View>
+    <SafeAreaProvider>
+      <NavigationContainer theme={NAVIGATION_THEME}>
+        <StatusBar style="light" />
+        <RootTabs />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    paddingTop: TOP_INSET,
-  },
-});
