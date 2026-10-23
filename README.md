@@ -16,3 +16,4 @@ App móvil (React Native + Expo SDK 58 + TypeScript) para gestionar una empresa 
 ## Estado por rama
 
 - `week-01`: pantalla de shipments con tarjetas (Core Components y Flexbox)
+- `week-02`: listas con `FlatList`, búsqueda sin tildes, pantalla de products y tema tipográfico
