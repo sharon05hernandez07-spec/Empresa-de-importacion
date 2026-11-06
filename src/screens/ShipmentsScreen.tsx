@@ -8,7 +8,10 @@ import { EmptyState } from '../components/EmptyState';
 import { ScreenHeader } from '../components/ScreenHeader';
 import { SearchInput } from '../components/SearchInput';
 import { ShipmentCard } from '../components/ShipmentCard';
+import { StatusFilterChips } from '../components/StatusFilterChips';
 import { SHIPMENTS } from '../data/shipments';
+import { useShipmentFilterStore } from '../store/shipmentFilterStore';
+import { useWatchlistStore } from '../store/watchlistStore';
 import { COLORS, SPACING } from '../theme/colors';
 import type { ShipmentsStackParamList } from '../types/navigation';
 import { matchesQuery } from '../utils/search';
@@ -19,14 +22,21 @@ export function ShipmentsScreen() {
   const navigation = useNavigation<ShipmentsNavigation>();
   const [query, setQuery] = useState('');
 
-  const filtered = SHIPMENTS.filter((shipment) =>
-    matchesQuery(
-      query,
-      shipment.reference,
-      shipment.supplier,
-      shipment.product,
-      shipment.originCountry,
-    ),
+  const statusFilter = useShipmentFilterStore((state) => state.statusFilter);
+  const setStatusFilter = useShipmentFilterStore((state) => state.setStatusFilter);
+  const watchedIds = useWatchlistStore((state) => state.watchedIds);
+  const toggleWatch = useWatchlistStore((state) => state.toggleWatch);
+
+  const filtered = SHIPMENTS.filter(
+    (shipment) =>
+      (statusFilter === 'all' || shipment.status === statusFilter) &&
+      matchesQuery(
+        query,
+        shipment.reference,
+        shipment.supplier,
+        shipment.product,
+        shipment.originCountry,
+      ),
   );
 
   return (
@@ -40,6 +50,7 @@ export function ShipmentsScreen() {
           onChangeText={setQuery}
           placeholder="Buscar por referencia, proveedor o país"
         />
+        <StatusFilterChips value={statusFilter} onChange={setStatusFilter} />
       </ScreenHeader>
       <FlatList
         data={filtered}
@@ -47,7 +58,9 @@ export function ShipmentsScreen() {
         renderItem={({ item }) => (
           <ShipmentCard
             shipment={item}
+            watched={watchedIds.includes(item.id)}
             onPress={() => navigation.navigate('ShipmentDetail', { shipmentId: item.id })}
+            onToggleWatch={() => toggleWatch(item.id)}
           />
         )}
         contentContainerStyle={styles.list}
