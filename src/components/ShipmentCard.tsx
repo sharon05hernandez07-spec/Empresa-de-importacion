@@ -3,13 +3,16 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { COLORS, SPACING } from '../theme/colors';
 import type { Shipment } from '../types/shipment';
 import { StatusBadge } from './StatusBadge';
+import { WatchStar } from './WatchStar';
 
 interface ShipmentCardProps {
   shipment: Shipment;
+  watched: boolean;
   onPress: () => void;
+  onToggleWatch: () => void;
 }
 
-export function ShipmentCard({ shipment, onPress }: ShipmentCardProps) {
+export function ShipmentCard({ shipment, watched, onPress, onToggleWatch }: ShipmentCardProps) {
   return (
     <Pressable
       onPress={onPress}
@@ -22,6 +25,7 @@ export function ShipmentCard({ shipment, onPress }: ShipmentCardProps) {
           <Text style={styles.supplier}>{shipment.supplier}</Text>
         </View>
         <StatusBadge status={shipment.status} />
+        <WatchStar watched={watched} onPress={onToggleWatch} />
       </View>
 
       <Text style={styles.product}>
