@@ -15,6 +15,7 @@ export type ProductsStackParamList = {
 export type RootTabParamList = {
   ShipmentsTab: NavigatorScreenParams<ShipmentsStackParamList>;
   ProductsTab: NavigatorScreenParams<ProductsStackParamList>;
+  WatchlistTab: undefined;
 };
 
 export type ShipmentsStackScreenProps<T extends keyof ShipmentsStackParamList> =
