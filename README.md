@@ -20,3 +20,4 @@ Si la red bloquea la conexión con el celular, usar `pnpm start --tunnel`.
 - `week-01`: pantalla de shipments con tarjetas (Core Components y Flexbox)
 - `week-02`: listas con `FlatList`, búsqueda sin tildes, pantalla de products y tema tipográfico
 - `week-03`: React Navigation 7 con tabs (Shipments y Products), stacks anidados, pantallas de detalle y rutas tipadas
+- `week-04`: estado global con Zustand: seguimiento de envíos (watchlist), filtro por estado y tab con insignia
